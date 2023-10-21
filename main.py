@@ -42,16 +42,13 @@ async def entrenar_modelo_combinado():
 @app.post("/subir-archivo")
 async def subir_archivo(archivo: UploadFile):
     
-    print("MODELO-------------------->0")
     # Asegúrate de que la carpeta exista, si no, créala
     if not os.path.exists("files"):
         os.makedirs("files")
     
-    print("MODELO-------------------->0.1")
     # Ruta completa del archivo a guardar
     file_path = os.path.join("files", archivo.filename)
     with open(file_path, "wb") as f:
         f.write(archivo.file.read())
     
-    print("MODELO-------------------->0.2")
     return ModeloCombinadoService.modelo_combinado(archivo.filename)
