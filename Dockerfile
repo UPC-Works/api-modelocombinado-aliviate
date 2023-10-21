@@ -14,8 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends gcc libpq-dev &
 
 # Install Python dependencies
 COPY requirements.txt .
-RUN pip install --upgrade pip && \
-    pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 # Copy the current directory contents into the container
 COPY . /app
