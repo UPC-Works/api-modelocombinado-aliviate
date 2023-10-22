@@ -18,6 +18,9 @@ RUN pip install --upgrade pip
 # Instala las dependencias
 RUN pip install uvicorn
 
+# Instala las dependencias
+RUN pip install fastapi
+
 # Copy the current directory contents into the container
 COPY . /app
 
