@@ -18,6 +18,10 @@ COPY requirements.txt .
 RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
+RUN pip install uvicorn
+
+RUN pip install fastapi
+
 # Copy the current directory contents into the container
 COPY . /app
 
