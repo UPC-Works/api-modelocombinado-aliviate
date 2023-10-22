@@ -13,16 +13,10 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y --no-install-recommends gcc libpq-dev && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --upgrade pip
-
-# Instala las dependencias
-RUN pip install uvicorn
-
-# Instala las dependencias
-RUN pip install fastapi
-
-# Instala las dependencias
-RUN pip install -r requirements.txt
+# Install Python dependencies
+COPY requirements.txt .
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt
 
 # Copy the current directory contents into the container
 COPY . /app
