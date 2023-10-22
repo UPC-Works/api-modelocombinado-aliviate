@@ -21,6 +21,9 @@ RUN pip install uvicorn
 # Instala las dependencias
 RUN pip install fastapi
 
+# Instala las dependencias
+RUN pip install -r requirements.txt
+
 # Copy the current directory contents into the container
 COPY . /app
 
