@@ -22,6 +22,8 @@ RUN pip install uvicorn
 
 RUN pip install fastapi
 
+RUN pip install python-multipart
+
 # Copy the current directory contents into the container
 COPY . /app
 
