@@ -35,7 +35,9 @@ async def informacion_entorno():
 
 @app.post("/entrenar-modelo-combinado")
 async def entrenar_modelo_combinado():
+    print("PASO 1-------------> entrenamiento_rf")
     TrainRFService.entrenamiento_rf()
+    print("PASO 1-------------> entrenamiento_tfidf",)
     TrainTFIDFService.entrenamiento_tfidf()
     return {"data": "OK"}
 
