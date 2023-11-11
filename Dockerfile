@@ -24,6 +24,8 @@ RUN pip install fastapi
 
 RUN pip install python-multipart
 
+RUN pip install openpyxl
+
 # Copy the current directory contents into the container
 COPY . /app
 
