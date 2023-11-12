@@ -26,7 +26,7 @@ RUN pip install python-multipart
 
 RUN pip install openpyxl
 
-RUN pip install tensorrt
+RUN pip install tensorflow
 
 # Copy the current directory contents into the container
 COPY . /app
