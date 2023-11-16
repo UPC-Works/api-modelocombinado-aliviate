@@ -11,11 +11,14 @@ import pickle
 import redis
 from sklearn.preprocessing import  LabelEncoder
 from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.ensemble import RandomForestClassifier
 import json
 
 class ModeloCombinadoService:
 
     def modelo_combinado(nombre_documento):
+
+        ############################################################################################################
         
         #Leer archivo excel
         df_historia_clinica = pd.read_excel(f'./files/{nombre_documento}')
@@ -26,8 +29,25 @@ class ModeloCombinadoService:
         #Leer archivo excel
         df_02 = pd.read_excel('./files/BD_SIGNOS_SINTOMAS.xlsx')
         
+        # Transformamos los datos y los preparamos de df_01_copy2
+
+        # Hacemos una segunda copia de df_01
+        df_01_copy2 = df_01.copy()
+        # Hacemos una segunda copia de df_02
+        df_02_copy = df_02.copy()
+
+        # Eliminamos todos los campos menos ENFERMEDAD y SIGNOS_SINTOMAS
+        df_01_copy2 = df_01_copy2[['ENFERMEDAD', 'SIGNOS_SINTOMAS']]
+        
+        # Transformamos los datos y los preparamos de df_02_copy
+
+        # Eliminamos todos los campos menos ENFERMEDAD y SIGNOS_SINTOMAS
+        df_02_copy = df_02_copy[['ENFERMEDAD', 'SIGNOS_SINTOMAS']]
+        
+        #######################################################
+        
         #Unimos df_02_copy y df_01_copy2
-        df_append = pd.concat([df_02,df_01])
+        df_append = pd.concat([df_02_copy,df_01_copy2])
         
         def remove_labels(df, label_name):
             X = df.drop(label_name, axis=1)
@@ -73,7 +93,7 @@ class ModeloCombinadoService:
         #Definimos el segmento de datos clínicos
         df_hc_copy_1 = df_hc_copy_1.drop(columns_to_drop, axis=1)
         X_datos_clinicos, y_datos_clinicos = remove_labels(df_hc_copy_1, 'ENFERMEDAD')
-        clf_rnd.fit(X_datos_clinicos, y_datos_clinicos)
+        #clf_rnd.fit(X_datos_clinicos, y_datos_clinicos)
 
         # ========================== Segmentamos el dataframe df_hc_copy_2 para obtener los signos y sintomas ==========================
         # Definimos el segmento de signos y sintomas
@@ -84,7 +104,7 @@ class ModeloCombinadoService:
         # ============= Obtenemos el top de las 3 enfermedades mas probables tomando el segmento de datos clinicos =====================
         # Obtener las probabilidades tomando en cuenta los datos clinicos
         probabilities = clf_rnd.predict_proba(X_datos_clinicos)
-
+        
         # Obtener la primera instancia
         first_instance = probabilities[0]
         
@@ -92,12 +112,12 @@ class ModeloCombinadoService:
         df_prob = pd.DataFrame({'ENFERMEDAD': clf_rnd.classes_, 'PROBABILIDAD': first_instance})
 
         # Ordenar el DataFrame por probabilidad en orden descendente y obtener las tres posibles enfermedades
-        df_top_3_enfermedades_datos_clinicos = df_prob.sort_values('PROBABILIDAD', ascending=False).head(3)
+        df_top_3_enfermedades_datos_clinicos = df_prob.sort_values('PROBABILIDAD', ascending=False).head(6)
 
         
         # =================== Obtenemos el top de las 3 enfermedades tomando el segmento de signos y sintomas =========================
         # Obtener las probabilidades tomando en cuenta los signos y sintomas
-        def search_symptoms(symptoms, num_results=3):
+        def search_symptoms(symptoms, num_results=6):
             # Transformar los síntomas de entrada en un vector TF-IDF
             tfidf_symptoms = vectorizer.transform([symptoms])
 
@@ -133,12 +153,13 @@ class ModeloCombinadoService:
 
         # Se ordena el dataframe combinado por probabilidad en orden descendente
         df_combined_sorted = df_combined.sort_values(by='PROBABILIDAD', ascending=False)
+        print("SORTEADO:",df_combined_sorted)
 
         # Eliminar duplicados en la columna de enfermedad
         df_combined_sorted_unique = df_combined_sorted.drop_duplicates(subset='ENFERMEDAD')
 
         # Seleccionamos las tres enfermedades más probables sin duplicados
-        df_top3_enfermedades = df_combined_sorted_unique['ENFERMEDAD'].head(3)
+        df_top3_enfermedades = df_combined_sorted_unique['ENFERMEDAD'].head(6)
 
         # Verificar si hay menos de tres enfermedades únicas
         if len(df_top3_enfermedades) < 3:
@@ -174,5 +195,5 @@ class ModeloCombinadoService:
         except Exception as e:
             print(f"Ocurrió un error al intentar eliminar el archivo: {e}")
  
-        return json.loads(df_resultados_filtrado.to_json(orient='records'))
+        return json.loads(df_resultados_filtrado.head(3).to_json(orient='records'))
 
