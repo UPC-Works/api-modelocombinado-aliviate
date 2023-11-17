@@ -1,1 +1,4 @@
 api-modelocombinado-aliviate
+modelo_rf.pkl
+tfidf_matrix.pkl
+vectorizer.pkl
