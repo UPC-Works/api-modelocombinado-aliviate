@@ -1,0 +1,751 @@
+revoke usage on schema public from public;
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 14.9 (Debian 14.9-1.pgdg120+1)
+-- Dumped by pg_dump version 14.8
+
+-- Started on 2023-11-17 12:44:22
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- TOC entry 209 (class 1259 OID 16705)
+-- Name: admin; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.admin (
+    id character varying(50) NOT NULL,
+    nombre_completo character varying(50),
+    correo character varying(50),
+    contrasenia character varying(250)
+);
+
+
+ALTER TABLE public.admin OWNER TO postgresc16;
+
+--
+-- TOC entry 221 (class 1259 OID 16821)
+-- Name: analisishistoria; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.analisishistoria (
+    id_historia_clinica character varying(50) NOT NULL,
+    id_analisis_campo integer NOT NULL,
+    valor numeric(10,2)
+);
+
+
+ALTER TABLE public.analisishistoria OWNER TO postgresc16;
+
+--
+-- TOC entry 220 (class 1259 OID 16820)
+-- Name: analisishistoria_id_analisis_campo_seq; Type: SEQUENCE; Schema: public; Owner: postgresc16
+--
+
+CREATE SEQUENCE public.analisishistoria_id_analisis_campo_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.analisishistoria_id_analisis_campo_seq OWNER TO postgresc16;
+
+--
+-- TOC entry 3448 (class 0 OID 0)
+-- Dependencies: 220
+-- Name: analisishistoria_id_analisis_campo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgresc16
+--
+
+ALTER SEQUENCE public.analisishistoria_id_analisis_campo_seq OWNED BY public.analisishistoria.id_analisis_campo;
+
+
+--
+-- TOC entry 219 (class 1259 OID 16810)
+-- Name: analisislaboratorio; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.analisislaboratorio (
+    id character varying(50) NOT NULL,
+    id_historia_clinica character varying(50) NOT NULL,
+    colesterol numeric(10,2),
+    trigliceridos numeric(10,2),
+    colesterol_hdl numeric(10,2),
+    colesterol_ldl numeric(10,2),
+    colesterol_vldl numeric(10,2),
+    riesgo1 numeric(10,2),
+    riesgo2 numeric(10,2),
+    glucosa numeric(10,2),
+    hematrocito numeric(10,2),
+    hemoglobina numeric(10,2),
+    tipo_examen character varying(20),
+    muestra character varying(20)
+);
+
+
+ALTER TABLE public.analisislaboratorio OWNER TO postgresc16;
+
+--
+-- TOC entry 223 (class 1259 OID 16826)
+-- Name: analisislaboratoriocampo; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.analisislaboratoriocampo (
+    id integer NOT NULL,
+    campo character varying(50),
+    campos_json character varying(50),
+    tipo character varying(50),
+    id_analisis integer NOT NULL
+);
+
+
+ALTER TABLE public.analisislaboratoriocampo OWNER TO postgresc16;
+
+--
+-- TOC entry 222 (class 1259 OID 16825)
+-- Name: analisislaboratoriocampo_id_seq; Type: SEQUENCE; Schema: public; Owner: postgresc16
+--
+
+CREATE SEQUENCE public.analisislaboratoriocampo_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.analisislaboratoriocampo_id_seq OWNER TO postgresc16;
+
+--
+-- TOC entry 3449 (class 0 OID 0)
+-- Dependencies: 222
+-- Name: analisislaboratoriocampo_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgresc16
+--
+
+ALTER SEQUENCE public.analisislaboratoriocampo_id_seq OWNED BY public.analisislaboratoriocampo.id;
+
+
+--
+-- TOC entry 224 (class 1259 OID 16832)
+-- Name: analisislaboratoriocodigo; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.analisislaboratoriocodigo (
+    id integer NOT NULL,
+    nombre character varying(50)
+);
+
+
+ALTER TABLE public.analisislaboratoriocodigo OWNER TO postgresc16;
+
+--
+-- TOC entry 210 (class 1259 OID 16710)
+-- Name: consulta; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.consulta (
+    id character varying(50) NOT NULL,
+    id_historia_clinica character varying(50) NOT NULL,
+    id_medico character varying(50) NOT NULL,
+    fecha_registro timestamp without time zone,
+    descripcion_enfermedad_paciente text,
+    tiempo_enfermedad integer,
+    apetito character varying(50),
+    sed character varying(50),
+    suenio character varying(50),
+    estado_animo character varying(50),
+    otro_detalle character varying(50),
+    orina character varying(50),
+    deposiciones character varying(50),
+    temperatura numeric(10,2),
+    peso numeric(10,2),
+    talla numeric(10,2),
+    i_m_c numeric(10,2),
+    diagnostico text,
+    tratamiento text,
+    examenes_auxiliares jsonb,
+    proxima_cita timestamp without time zone,
+    observaciones text,
+    sigos_sintomas text,
+    p_a numeric(10,2),
+    f_c numeric(10,2),
+    f_r numeric(10,2),
+    diagnostico_ia jsonb,
+    tratamiento_ia jsonb
+);
+
+
+ALTER TABLE public.consulta OWNER TO postgresc16;
+
+--
+-- TOC entry 211 (class 1259 OID 16717)
+-- Name: departamento; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.departamento (
+    id integer NOT NULL,
+    nombre character varying(50)
+);
+
+
+ALTER TABLE public.departamento OWNER TO postgresc16;
+
+--
+-- TOC entry 227 (class 1259 OID 16872)
+-- Name: diagnosticoia; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.diagnosticoia (
+    id character varying(50) NOT NULL,
+    id_consulta character varying(50) NOT NULL,
+    enfermedad character varying(50),
+    probabilidad numeric(10,2),
+    es_aceptado boolean
+);
+
+
+ALTER TABLE public.diagnosticoia OWNER TO postgresc16;
+
+--
+-- TOC entry 212 (class 1259 OID 16722)
+-- Name: distrito; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.distrito (
+    id integer NOT NULL,
+    nombre character varying(50),
+    id_provincia integer NOT NULL
+);
+
+
+ALTER TABLE public.distrito OWNER TO postgresc16;
+
+--
+-- TOC entry 225 (class 1259 OID 16837)
+-- Name: documentohistoria; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.documentohistoria (
+    id character varying(50) NOT NULL,
+    id_historia_clinica character varying(50) NOT NULL,
+    url character varying(200)
+);
+
+
+ALTER TABLE public.documentohistoria OWNER TO postgresc16;
+
+--
+-- TOC entry 213 (class 1259 OID 16727)
+-- Name: establecimiento; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.establecimiento (
+    id character varying(50) NOT NULL,
+    id_distrito integer NOT NULL,
+    nombre character varying(100),
+    direccion character varying(250)
+);
+
+
+ALTER TABLE public.establecimiento OWNER TO postgresc16;
+
+--
+-- TOC entry 214 (class 1259 OID 16732)
+-- Name: establecimientomedico; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.establecimientomedico (
+    id_establecimiento character varying(50) NOT NULL,
+    id_medico character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.establecimientomedico OWNER TO postgresc16;
+
+--
+-- TOC entry 215 (class 1259 OID 16735)
+-- Name: historiaclinica; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.historiaclinica (
+    id character varying(50) NOT NULL,
+    id_distrito integer NOT NULL,
+    id_paciente character varying(50) NOT NULL,
+    fecha_registro timestamp without time zone,
+    direccion character varying(100),
+    tuvo_tuberculosis boolean,
+    tiene_inf_trans_sex boolean,
+    tiene_diabetes boolean,
+    tiene_hta boolean,
+    tiene_sobrepeso boolean,
+    tiene_dislipenia boolean,
+    tiene_inf_renal_glaucoma boolean,
+    tiene_depresion_esquizofrenia boolean,
+    antecedentes jsonb,
+    tiene_hospitaliacion_transfusiones boolean,
+    dispacidad jsonb,
+    tiene_consumo_tabaco boolean,
+    tiene_consumo_alcohol boolean,
+    tiene_consumo_drogas boolean,
+    tiene_inter_quirurjica boolean,
+    cancer jsonb,
+    tiene_riesgo boolean,
+    tiene_violencia boolean,
+    tiene_sida boolean,
+    tiene_its boolean,
+    tiene_hepatitis boolean,
+    tiene_dbm boolean,
+    tiene_infarto boolean,
+    tiene_cancer boolean,
+    tiene_depresion boolean,
+    tiene_prob_psiquiatricos boolean,
+    otros jsonb,
+    reaccion_medicamentos jsonb,
+    medicamente_frecuente jsonb,
+    edad_inicio_relacion_sexual integer,
+    num_parejas integer,
+    hijos_vivos integer,
+    rs_mismo_sexo boolean,
+    menarquia jsonb,
+    flujo_vag_patologico boolean,
+    dismenorrea boolean,
+    tiene_embarazo boolean,
+    tiene_parto boolean,
+    tiene_prematuro boolean,
+    tiene_aborto boolean,
+    gestacion jsonb,
+    tiene_fiebre_15_dias boolean,
+    tiene_tos_15_dias boolean,
+    lesiones_genitales jsonb,
+    presion_arterial jsonb,
+    tiene_vac_antitetanica boolean,
+    tiene_vac_antiamerilica boolean,
+    tiene_vac_antihepatitis_b boolean,
+    tiene_encias boolean,
+    tiene_caries boolean,
+    tiene_edentulismo_parcial boolean,
+    tiene_edentulismo_total boolean,
+    tiene_urg_tratamiento_bucal boolean,
+    tiene_ansiedad boolean,
+    tiene_exam_visual boolean,
+    tiene_exam_colesterol boolean,
+    tiene_exam_glucosa boolean,
+    tiene_exam_mamas boolean,
+    tiene_exam_prostata boolean,
+    tiene_exam_pelvico_pap boolean,
+    tiene_exam_mamografia boolean,
+    tiene_hab_fisica boolean,
+    tiene_hab_alcohol boolean,
+    tiene_hab_drogas boolean,
+    tiene_planificacion_sexual boolean,
+    estado_civil integer,
+    grado_institucion integer,
+    ocupacion character varying(100),
+    id_medico character varying(50),
+    codigo character varying(20)
+);
+
+
+ALTER TABLE public.historiaclinica OWNER TO postgresc16;
+
+--
+-- TOC entry 216 (class 1259 OID 16742)
+-- Name: medico; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.medico (
+    id character varying(50) NOT NULL,
+    nombre character varying(50),
+    apellido character varying(50),
+    colegiatura character varying(50),
+    correo character varying(50),
+    contrasenia character varying(150),
+    fecha_registro timestamp without time zone,
+    direccion character varying(250),
+    especialidad character varying(50)
+);
+
+
+ALTER TABLE public.medico OWNER TO postgresc16;
+
+--
+-- TOC entry 226 (class 1259 OID 16862)
+-- Name: modificacioneshistoria; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.modificacioneshistoria (
+    id character varying(50) NOT NULL,
+    id_historia_clinica character varying(50) NOT NULL,
+    nombre_medico character varying(50),
+    actualizado_el timestamp without time zone
+);
+
+
+ALTER TABLE public.modificacioneshistoria OWNER TO postgresc16;
+
+--
+-- TOC entry 217 (class 1259 OID 16749)
+-- Name: paciente; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.paciente (
+    id character varying(50) NOT NULL,
+    nombre character varying(100),
+    apellido character varying(100),
+    fecha_nacimiento timestamp without time zone,
+    genero integer,
+    documento_identidad integer,
+    fecha_registro timestamp without time zone,
+    grupo_sanguineo character varying(50),
+    rh_sanguineo character varying(50),
+    telefono character varying(50)
+);
+
+
+ALTER TABLE public.paciente OWNER TO postgresc16;
+
+--
+-- TOC entry 218 (class 1259 OID 16754)
+-- Name: provincia; Type: TABLE; Schema: public; Owner: postgresc16
+--
+
+CREATE TABLE public.provincia (
+    id integer NOT NULL,
+    nombre character varying(50),
+    id_departamento integer NOT NULL
+);
+
+
+ALTER TABLE public.provincia OWNER TO postgresc16;
+
+--
+-- TOC entry 3255 (class 2604 OID 16824)
+-- Name: analisishistoria id_analisis_campo; Type: DEFAULT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.analisishistoria ALTER COLUMN id_analisis_campo SET DEFAULT nextval('public.analisishistoria_id_analisis_campo_seq'::regclass);
+
+
+--
+-- TOC entry 3256 (class 2604 OID 16829)
+-- Name: analisislaboratoriocampo id; Type: DEFAULT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.analisislaboratoriocampo ALTER COLUMN id SET DEFAULT nextval('public.analisislaboratoriocampo_id_seq'::regclass);
+
+
+--
+-- TOC entry 3258 (class 2606 OID 16709)
+-- Name: admin admin_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.admin
+    ADD CONSTRAINT admin_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3276 (class 2606 OID 16814)
+-- Name: analisislaboratorio analisislaboratorio_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.analisislaboratorio
+    ADD CONSTRAINT analisislaboratorio_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3278 (class 2606 OID 16831)
+-- Name: analisislaboratoriocampo analisislaboratoriocampo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.analisislaboratoriocampo
+    ADD CONSTRAINT analisislaboratoriocampo_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3280 (class 2606 OID 16836)
+-- Name: analisislaboratoriocodigo analisislaboratoriocodigo_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.analisislaboratoriocodigo
+    ADD CONSTRAINT analisislaboratoriocodigo_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3260 (class 2606 OID 16716)
+-- Name: consulta consulta_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.consulta
+    ADD CONSTRAINT consulta_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3262 (class 2606 OID 16721)
+-- Name: departamento departamento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.departamento
+    ADD CONSTRAINT departamento_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3286 (class 2606 OID 16876)
+-- Name: diagnosticoia diagnosticoia_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.diagnosticoia
+    ADD CONSTRAINT diagnosticoia_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3264 (class 2606 OID 16726)
+-- Name: distrito distrito_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.distrito
+    ADD CONSTRAINT distrito_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3282 (class 2606 OID 16841)
+-- Name: documentohistoria documentohistoria_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.documentohistoria
+    ADD CONSTRAINT documentohistoria_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3266 (class 2606 OID 16731)
+-- Name: establecimiento establecimiento_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.establecimiento
+    ADD CONSTRAINT establecimiento_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3268 (class 2606 OID 16741)
+-- Name: historiaclinica historiaclinica_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.historiaclinica
+    ADD CONSTRAINT historiaclinica_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3270 (class 2606 OID 16748)
+-- Name: medico medico_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.medico
+    ADD CONSTRAINT medico_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3284 (class 2606 OID 16866)
+-- Name: modificacioneshistoria modificacioneshistoria_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.modificacioneshistoria
+    ADD CONSTRAINT modificacioneshistoria_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3272 (class 2606 OID 16753)
+-- Name: paciente paciente_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.paciente
+    ADD CONSTRAINT paciente_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3274 (class 2606 OID 16758)
+-- Name: provincia provincia_pkey; Type: CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.provincia
+    ADD CONSTRAINT provincia_pkey PRIMARY KEY (id);
+
+
+--
+-- TOC entry 3299 (class 2606 OID 16852)
+-- Name: analisishistoria fk_analisislaboratoriocampo_to_analisishistoria; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.analisishistoria
+    ADD CONSTRAINT fk_analisislaboratoriocampo_to_analisishistoria FOREIGN KEY (id_analisis_campo) REFERENCES public.analisislaboratoriocampo(id);
+
+
+--
+-- TOC entry 3300 (class 2606 OID 16842)
+-- Name: analisislaboratoriocampo fk_analisislaboratoriocodigo_to_analisislaboratoriocampo; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.analisislaboratoriocampo
+    ADD CONSTRAINT fk_analisislaboratoriocodigo_to_analisislaboratoriocampo FOREIGN KEY (id_analisis) REFERENCES public.analisislaboratoriocodigo(id);
+
+
+--
+-- TOC entry 3303 (class 2606 OID 16877)
+-- Name: diagnosticoia fk_consulta_to_diagnosticoia; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.diagnosticoia
+    ADD CONSTRAINT fk_consulta_to_diagnosticoia FOREIGN KEY (id_consulta) REFERENCES public.consulta(id);
+
+
+--
+-- TOC entry 3296 (class 2606 OID 16759)
+-- Name: provincia fk_departamento_to_provincia; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.provincia
+    ADD CONSTRAINT fk_departamento_to_provincia FOREIGN KEY (id_departamento) REFERENCES public.departamento(id);
+
+
+--
+-- TOC entry 3290 (class 2606 OID 16779)
+-- Name: establecimiento fk_distrito_to_establecimiento; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.establecimiento
+    ADD CONSTRAINT fk_distrito_to_establecimiento FOREIGN KEY (id_distrito) REFERENCES public.distrito(id);
+
+
+--
+-- TOC entry 3293 (class 2606 OID 16769)
+-- Name: historiaclinica fk_distrito_to_historiaclinica; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.historiaclinica
+    ADD CONSTRAINT fk_distrito_to_historiaclinica FOREIGN KEY (id_distrito) REFERENCES public.distrito(id);
+
+
+--
+-- TOC entry 3291 (class 2606 OID 16794)
+-- Name: establecimientomedico fk_establecimiento_to_establecimientomedico; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.establecimientomedico
+    ADD CONSTRAINT fk_establecimiento_to_establecimientomedico FOREIGN KEY (id_establecimiento) REFERENCES public.establecimiento(id);
+
+
+--
+-- TOC entry 3298 (class 2606 OID 16847)
+-- Name: analisishistoria fk_historiaclinica_to_analisishistoria; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.analisishistoria
+    ADD CONSTRAINT fk_historiaclinica_to_analisishistoria FOREIGN KEY (id_historia_clinica) REFERENCES public.historiaclinica(id);
+
+
+--
+-- TOC entry 3297 (class 2606 OID 16815)
+-- Name: analisislaboratorio fk_historiaclinica_to_analisislaboratorio; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.analisislaboratorio
+    ADD CONSTRAINT fk_historiaclinica_to_analisislaboratorio FOREIGN KEY (id_historia_clinica) REFERENCES public.historiaclinica(id);
+
+
+--
+-- TOC entry 3287 (class 2606 OID 16774)
+-- Name: consulta fk_historiaclinica_to_consulta; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.consulta
+    ADD CONSTRAINT fk_historiaclinica_to_consulta FOREIGN KEY (id_historia_clinica) REFERENCES public.historiaclinica(id);
+
+
+--
+-- TOC entry 3301 (class 2606 OID 16857)
+-- Name: documentohistoria fk_historiaclinica_to_documentohistoria; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.documentohistoria
+    ADD CONSTRAINT fk_historiaclinica_to_documentohistoria FOREIGN KEY (id_historia_clinica) REFERENCES public.historiaclinica(id);
+
+
+--
+-- TOC entry 3302 (class 2606 OID 16867)
+-- Name: modificacioneshistoria fk_historiaclinica_to_modificacioneshistoria; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.modificacioneshistoria
+    ADD CONSTRAINT fk_historiaclinica_to_modificacioneshistoria FOREIGN KEY (id_historia_clinica) REFERENCES public.historiaclinica(id);
+
+
+--
+-- TOC entry 3288 (class 2606 OID 16789)
+-- Name: consulta fk_medico_to_consulta; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.consulta
+    ADD CONSTRAINT fk_medico_to_consulta FOREIGN KEY (id_medico) REFERENCES public.medico(id);
+
+
+--
+-- TOC entry 3292 (class 2606 OID 16799)
+-- Name: establecimientomedico fk_medico_to_establecimientomedico; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.establecimientomedico
+    ADD CONSTRAINT fk_medico_to_establecimientomedico FOREIGN KEY (id_medico) REFERENCES public.medico(id);
+
+
+--
+-- TOC entry 3295 (class 2606 OID 16805)
+-- Name: historiaclinica fk_medico_to_historiaclinica; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.historiaclinica
+    ADD CONSTRAINT fk_medico_to_historiaclinica FOREIGN KEY (id_medico) REFERENCES public.medico(id);
+
+
+--
+-- TOC entry 3294 (class 2606 OID 16784)
+-- Name: historiaclinica fk_paciente_to_historiaclinica; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.historiaclinica
+    ADD CONSTRAINT fk_paciente_to_historiaclinica FOREIGN KEY (id_paciente) REFERENCES public.paciente(id);
+
+
+--
+-- TOC entry 3289 (class 2606 OID 16764)
+-- Name: distrito fk_provincia_to_distrito; Type: FK CONSTRAINT; Schema: public; Owner: postgresc16
+--
+
+ALTER TABLE ONLY public.distrito
+    ADD CONSTRAINT fk_provincia_to_distrito FOREIGN KEY (id_provincia) REFERENCES public.provincia(id);
+
+
+-- Completed on 2023-11-17 12:44:36
+
+--
+-- PostgreSQL database dump complete
+--
+
+INSERT INTO departamento (id,nombre) VALUES (1,'Lima');
+INSERT INTO Provincia(id, nombre, id_departamento) VALUES (1,'Lima',1);
+INSERT INTO distrito(id, nombre, id_provincia) VALUES (1,'Santiago de Surco',1);
